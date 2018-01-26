@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>MRP2 results</title>
+    <link rel="stylesheet" href="css/mrp3.css">
+    <link rel="stylesheet" href="js/jquery-ui.min.css">
+    <link rel="stylesheet" href="js/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="js/jquery-ui.theme.min.css">
+    <link rel="stylesheet" href="css/mrp3.css">
+    <script src="js/external/jquery/jquery.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/mrp3.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <div id="central-header" class="top-header top-header1">
+        <h2>Результаты ППМ за ${currDate}</h2>
+    </div>
+    <div id="commands" class="grey-border">
+        <button id="toExcel" name="toExcel" value="export" class="button1 button2">Выгрузить в Excel</button>
+    </div>
+    <div id="content" class="responstable">
+        <table>
+            <thead>
+            <tr>
+                <th>№ материала</th>
+                <th>Описание</th>
+                <th>ГрЗакупок</th>
+                <th>Наименование</th>
+                <th>Склад</th>
+                <th>ЕИ</th>
+                <th>СвобЗапас</th>
+                <th>Запас на КК</th>
+                <th>БлокЗапас</th>
+                <#list headReqs as req>
+                <th>${req}</th>
+            </#list>
+            </tr>
+            </thead>
+            <tbody>
+                <#list results as res>
+                <tr>
+                    <td>${res.materialId}</td>
+                    <td>${res.description}</td>
+                    <td>${res.purchaseGroup}</td>
+                    <td>${res.name}</td>
+                    <td>${res.warehouse}</td>
+                    <td>${res.uom}</td>
+                    <td>${res.free}</td>
+                    <td>${res.quality}</td>
+                    <td>${res.block}</td>
+                        <#list res.requirements as r>
+                            <td>${r}</td>
+                        </#list>
+                </tr>
+                </#list>
+            </tbody>
+        </table>
+    </div>
+    <div id="footer"><p>${message}</p></div>
+</div>
+</body>
+</html>

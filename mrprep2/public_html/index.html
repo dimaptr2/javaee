@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>ППМ за полгода</title>
+    <link rel="stylesheet" href="js/jquery-ui.min.css">
+    <link rel="stylesheet" href="js/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="js/jquery-ui.theme.min.css">
+    <link rel="stylesheet" href="css/mrp3.css">
+    <script src="js/external/jquery/jquery.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/mrp3.js"></script>
+</head>
+<body>
+<div id="wrapper" class="wrapper">
+    <div id="header" class="top-header top-header1">
+        <h2>Прогноз потребностей в сырье и материалах</h2>
+    </div>
+    <div><p><br></p></div>
+    <div id="parameters" class="params-panel">
+        <form id="main-form">
+            <fieldset id="mats" class="grey-border">
+                <legend class="label1">Выбор материалов</legend>
+                <label id="second" class="label1">С материала</label>
+                <br>
+                <input id="matnrLow" name="matnrLow" type="text" class="input1">
+                <br>
+                <label id="third" class="label1">По материал</label>
+                <br>
+                <input id="matnrHigh" name="matnrHigh" type="text" class="input1">
+            </fieldset>
+            <fieldset id="orgstr" class="grey-border">
+                <legend class="label1">ОргЕдиницы</legend>
+                <label id="fourth" class="label1">Группа закупок</label>
+                <br>
+                <select id="purGroup" name="purGroup" class="input1">
+                    <option value="001">001 Маркова А.</option>
+                    <option value="002">002 Маркова А.</option>
+                    <option value="003">003 Крутова Н.</option>
+                    <option value="004">004 Горбатова М.</option>
+                    <option value="005">005 Филистов А.</option>
+                    <option value="006">006 Мясосырье</option>
+                    <option value="007">007 Услуги</option>
+                    <option value="010">010 Инвестиции</option>
+                    <option value="011">011 Калинина А.</option>
+                    <option value="012">012 Ерёмин С.</option>
+                    <option value="999">999 Бухгалтерия</option>
+                </select>
+                <br>
+                <label class="label1">Склад</label>
+                <br>
+                <select id="place" name="place" class="input1">
+                    <option value="1010">1010 Склад №1</option>
+                    <option value="1011">1011 Вагоны № 1, 2, 3</option>
+                    <option value="1012">1012 Склад утилизации</option>
+                    <option value="1020">1020 Склад №2</option>
+                    <option value="1021">1021 Склад ВХ м/c</option>
+                    <option value="1040">1040 Склад №4</option>
+                    <option value="1041">1041 Склад №4 НЛ</option>
+                    <option value="1050">1050 Склад № 3, 5</option>
+                    <option value="1051">1051 Склад № 3, 5 НЛ</option>
+                    <option value="1080">1080 Склад №8</option>
+                    <option value="1081">1081 Склад №8 НЛ</option>
+                    <option value="1090">1090 Склад №9</option>
+                    <option value="1091">1091 Склад №9 НЛ</option>
+                    <option value="1100">1100 МХВ</option>
+                    <option value="1110">1110 Склад канцтовар.</option>
+                    <option value="1120">1120 Лаборатория</option>
+                    <option value="1130">1130 СББЖ</option>
+                    <option value="1200">1200 Топливо в баках</option>
+                </select>
+            </fieldset>
+            <fieldset id="running" class="grey-border">
+                <legend class="label1">Выполнение отчёта</legend>
+                <br>
+                <button id="Run" type="submit"
+                        formaction="/mrp2" formmethod="post" value="Run" class="button1 button2">
+                    Выполнить
+                </button>
+                <br>
+                <button id="toExcel" type="submit" name="toExcel"
+                        formaction="/excel" formmethod="post" value="export" class="button1 button2">
+                    Выгрузить в Excel
+                </button>
+            </fieldset>
+        </form>
+    </div>
+</div>
+</body>
+</html>

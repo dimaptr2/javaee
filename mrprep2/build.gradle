@@ -1,0 +1,46 @@
+buildscript {
+    ext {
+        jetty_version = '9.4.8.v20171121'
+        mysql_version = '5.1.45'
+    }
+}
+
+group 'ru.velkomfood.reports.mrp'
+version '2.1'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+mainClassName = project.group + '.Launcher'
+
+sourceCompatibility = 1.9
+targetCompatibility = 1.9
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.eclipse.jetty.aggregate:jetty-all:$jetty_version"
+    compile "mysql:mysql-connector-java:$mysql_version"
+    compile "org.freemarker:freemarker:2.3.23"
+    compile "com.google.code.gson:gson:2.8.2"
+    compile "org.apache.poi:poi-ooxml:3.17"
+}
+
+jar {
+    baseName = project.name
+    version = project.version
+    manifest {
+        attributes(
+                'Main-Class': mainClassName,
+                'Class-Path': configurations.runtime.collect() { 'replib/' + it.name }.join(' ')
+        )
+    }
+}
+
+task copyDependencies(type: Copy) {
+    from configurations.runtime
+    into 'build/libs/replib'
+}
