@@ -1,0 +1,49 @@
+group 'ru.velkomfood.edi.info.webreport'
+version '1.0.1'
+
+buildscript {
+    ext {
+        grizzly_version = '2.3.4'
+        mysql_version = '5.1.45'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+mainClassName = group + '.Launcher'
+
+sourceCompatibility = 1.9
+targetCompatibility = 1.9
+
+repositories {
+    mavenCentral()
+}
+// Names of SAP Java libraries
+def SAPnames = ['sapidoc3.jar', 'sapjco3.jar']
+
+dependencies {
+    runtime fileTree(dir: '/usr/sap/JCo', includes: SAPnames)
+    compile "org.glassfish.grizzly:grizzly-http-server:$grizzly_version"
+    compile "mysql:mysql-connector-java:$mysql_version"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+// Build a fat jar file, that will be containing all dependencies.
+jar {
+
+    baseName = project.name
+    version = project.version
+
+    manifest {
+        attributes(
+                'Main-Class': mainClassName,
+                'Implementation-Version': version,
+                'Class-Path': SAPnames.collect() { !it.isEmpty() ? ('/usr/sap/JCo/' + it ) : '' }.join(' ')
+        )
+    }
+    // Include all dependencies into jar file form the compile configuration
+    from configurations.compile.collect() { it.isDirectory() ? it : zipTree(it) }
+
+}
