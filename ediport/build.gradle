@@ -1,0 +1,54 @@
+buildscript {
+    ext {
+        grizzly_version = '2.4.3'
+        h2_version = '1.4.197'
+        ormlite_version = '5.1'
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+group 'ru.velkomfood.grizzly.edi.port'
+version '2.1'
+
+sourceCompatibility = 1.9
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    // Local libraries
+    compileOnly fileTree(dir: '/usr/sap/edi', include: 'kocon-1.2.jar')
+    compileOnly fileTree(dir: '/usr/sap/JCo', includes: ['sapidoc3.jar', 'sapjco3.jar'])
+    // Grizzly JAX-WS framework
+    compile "org.glassfish.grizzly:grizzly-http-server-jaxws:$grizzly_version"
+    // XML-SOAP framework
+    compile "com.sun.xml.ws:jaxws-rt:2.3.0"
+    // H2 database server
+    compile "com.h2database:h2:$h2_version"
+    // ORM Lite framework
+    compile "com.j256.ormlite:ormlite-core:$ormlite_version"
+    compile "com.j256.ormlite:ormlite-jdbc:$ormlite_version"
+
+    // JUnit framework (for testing purposes)
+    testCompile "junit:junit:4.12"
+}
+
+// Build the fat jar
+jar {
+    baseName = project.name
+    version = project.version
+    def localClassPath = '/usr/sap/edi/kocon-1.2.jar /usr/sap/JCo/sapidoc3.jar /usr/sap/JCo/sapjco3.jar'
+    manifest {
+        attributes(
+                'Implementation-Version': version,
+                'Main-Class': project.group + '.Launcher',
+                'Class-Path': localClassPath
+        )
+    }
+    from configurations.compile.collect() { it.isDirectory() ? it : zipTree(it) }
+}
