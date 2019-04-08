@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '5.0.0'
+}
+
+group 'ru.velkomfood.sap.tv.viewer'
+version '12.4.1'
+mainClassName = group + '.Launcher'
+
+sourceCompatibility = 12
+targetCompatibility = 12
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // SAP Java Connector
+    compileOnly fileTree(dir: '/usr/sap/JCo', includes: ['sapjco3.jar'])
+    // Mini DI framework
+    implementation "com.google.dagger:dagger:2.22.1"
+    // Spark Java Web Framework
+    implementation "com.sparkjava:spark-core:2.9.0"
+    implementation "com.sparkjava:spark-template-velocity:2.7.1"
+    // Google JSON
+    implementation "com.google.code.gson:gson:2.8.5"
+    // Google Guava
+    implementation "com.google.guava:guava:27.1-jre"
+    // Logger
+    implementation "org.slf4j:slf4j-simple:1.7.26"
+    // SQL2O jdbc temmplater
+    implementation "org.sql2o:sql2o:1.6.0"
+    // H2 database
+    implementation "com.h2database:h2:1.4.199"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+// Create a fat jar without external SAP Java Connector
+shadowJar {
+    manifest {
+        attributes('Implementation-Version' : project.version)
+        attributes('Main-Class' : mainClassName)
+        attributes('Class-Path' : '/usr/sap/JCo/sapjco3.jar')
+    }
+}
