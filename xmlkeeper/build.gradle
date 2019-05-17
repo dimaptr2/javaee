@@ -8,6 +8,8 @@ ext {
     sparkJavaVersion = '2.9.0'
     sparkTemplaterVersion = '2.7.1'
     slf4jVersion = '1.7.26'
+    sql2oVersion = '1.6.0'
+    mariadbVersion = '2.4.1'
 }
 
 group 'ru.velkomfood.sap.xml.storage'
@@ -22,10 +24,15 @@ repositories {
 }
 
 dependencies {
+    
     compile "com.sparkjava:spark-core:$sparkJavaVersion"
     compile "com.sparkjava:spark-template-velocity:$sparkTemplaterVersion"
     compile "org.slf4j:slf4j-simple:$slf4jVersion"
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile "org.sql2o:sql2o:$sql2oVersion"
+    compile "org.mariadb.jdbc:mariadb-java-client:$mariadbVersion"
+    // for testing
+    testCompile "junit:junit:4.12"
+    
 }
 
 // Create a fat jar file
