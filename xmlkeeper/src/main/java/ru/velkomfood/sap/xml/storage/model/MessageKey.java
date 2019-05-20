@@ -3,12 +3,12 @@ package ru.velkomfood.sap.xml.storage.model;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 public class MessageKey implements Serializable {
 
-    private java.sql.Date date;
-    private java.sql.Time time;
+    private java.sql.Timestamp moment;
     private long customerId;
     private long providerId;
     private String messageType;
@@ -16,29 +16,19 @@ public class MessageKey implements Serializable {
     public MessageKey() {
     }
 
-    public MessageKey(Date date, Time time,
-                      long customerId, long providerId, String messageType) {
-        this.date = date;
-        this.time = time;
+    public MessageKey(Timestamp moment, long customerId, long providerId, String messageType) {
+        this.moment = moment;
         this.customerId = customerId;
         this.providerId = providerId;
         this.messageType = messageType;
     }
 
-    public Date getDate() {
-        return date;
+    public Timestamp getMoment() {
+        return moment;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Time getTime() {
-        return time;
-    }
-
-    public void setTime(Time time) {
-        this.time = time;
+    public void setMoment(Timestamp moment) {
+        this.moment = moment;
     }
 
     public long getCustomerId() {
@@ -69,24 +59,22 @@ public class MessageKey implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MessageKey that = (MessageKey) o;
-        return customerId == that.customerId &&
-                providerId == that.providerId &&
-                date.equals(that.date) &&
-                time.equals(that.time) &&
-                messageType.equals(that.messageType);
+        MessageKey key = (MessageKey) o;
+        return customerId == key.customerId &&
+                providerId == key.providerId &&
+                moment.equals(key.moment) &&
+                messageType.equals(key.messageType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(date, time, customerId, providerId, messageType);
+        return Objects.hash(moment, customerId, providerId, messageType);
     }
 
     @Override
     public String toString() {
         return "MessageKey{" +
-                "date=" + date +
-                ", time=" + time +
+                "moment=" + moment +
                 ", customerId=" + customerId +
                 ", providerId=" + providerId +
                 ", messageType='" + messageType + '\'' +

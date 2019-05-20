@@ -2,7 +2,15 @@ package ru.velkomfood.sap.xml.storage.controller;
 
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
+import ru.velkomfood.sap.xml.storage.behavior.DAO;
 import ru.velkomfood.sap.xml.storage.behavior.DatabaseListener;
+import ru.velkomfood.sap.xml.storage.model.Customer;
+import ru.velkomfood.sap.xml.storage.model.MessageKey;
+import ru.velkomfood.sap.xml.storage.model.Provider;
+import ru.velkomfood.sap.xml.storage.model.SoapMessage;
+import ru.velkomfood.sap.xml.storage.repository.CustomerDao;
+import ru.velkomfood.sap.xml.storage.repository.ProviderDao;
+import ru.velkomfood.sap.xml.storage.repository.SoapMessageDao;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -45,9 +53,42 @@ public class DatabaseListenerImpl implements DatabaseListener {
 
     }
 
+    @Override
+    public void createCustomerEntity(Customer customer) {
+
+        DAO<Customer, Long> dao = new CustomerDao(sqlManager);
+        if (!dao.exists(customer)) {
+            dao.create(customer);
+        }
+
+    }
+
+    @Override
+    public void createSoapMessageEntity(SoapMessage message) {
+
+        DAO<SoapMessage, MessageKey> dao = new SoapMessageDao(sqlManager);
+        if (dao.exists(message)) {
+            dao.update(message);
+        } else {
+            dao.create(message);
+        }
+
+    }
+
     // private section
 
     private void initProvidersTable() {
+
+        DAO<Provider, Long> dao = new ProviderDao(sqlManager);
+        Provider provider1 = new Provider(1, "EDI Soft");
+        if (!dao.exists(provider1)) {
+            dao.create(provider1);
+        }
+
+        Provider provider2 = new Provider(2, "Korus");
+        if (!dao.exists(provider2)) {
+            dao.create(provider2);
+        }
 
     }
 

@@ -1,7 +1,10 @@
 package ru.velkomfood.sap.xml.storage.controller;
 
+import com.sap.conn.jco.JCoException;
 import ru.velkomfood.sap.xml.storage.behavior.DatabaseListener;
+import ru.velkomfood.sap.xml.storage.behavior.ErpListener;
 import ru.velkomfood.sap.xml.storage.behavior.WebEngine;
+import ru.velkomfood.sap.xml.storage.model.Customer;
 import ru.velkomfood.sap.xml.storage.model.SoapMessage;
 import spark.ModelAndView;
 import spark.Request;
@@ -9,10 +12,12 @@ import spark.Response;
 import spark.template.velocity.VelocityTemplateEngine;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
 import static spark.Spark.*;
@@ -21,11 +26,13 @@ public class WebEngineImpl implements WebEngine {
 
     private final Properties serverParameters;
     private final DatabaseListener databaseListener;
+    private final ErpListener erpListener;
     private static final String TEMPLATE_PATH = "templates";
 
-    public WebEngineImpl(Properties serverParameters, DatabaseListener databaseListener) {
+    public WebEngineImpl(Properties serverParameters, DatabaseListener databaseListener, ErpListener erpListener) {
         this.serverParameters = serverParameters;
         this.databaseListener = databaseListener;
+        this.erpListener = erpListener;
     }
 
     @Override
@@ -65,22 +72,29 @@ public class WebEngineImpl implements WebEngine {
     private Object keepMessage(Request request, Response response) {
 
         Map<String, Object> model = new HashMap<>();
-        LocalDate currDate = LocalDate.now();
+        LocalDateTime currDateTime = LocalDateTime.now();
         // 24-hours format
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("kk:mm:ss");
-        String currTime = LocalTime.now().format(formatter);
-        model.put("currentDate", translateLocalDateToRussianFormat(currDate));
-        model.put("currentTime", currTime);
+        model.put("currentDate", translateLocalDateToRussianFormat(currDateTime.toLocalDate()));
+        model.put("currentTime", currDateTime.toLocalTime().format(formatter));
 
         // Get parameters and the body
-        java.sql.Date sqlDate = java.sql.Date.valueOf(currDate.toString());
-        java.sql.Time sqlTime = java.sql.Time.valueOf(currTime);
         long customerId = Long.valueOf(request.params(":customer"));
+        // Add a customer if not exist.
+        try {
+            Optional<Customer> optionalCustomer = erpListener.createCustomer(String.valueOf(customerId));
+            optionalCustomer.ifPresent(databaseListener::createCustomerEntity);
+        } catch (JCoException ex) {
+            LOGGER.error(ex.getMessage());
+        }
+
         String msgType = request.params(":messageType");
         long providerId = Long.valueOf(request.params(":provider"));
         String body = request.body();
         // Create a SOAP message object
-        SoapMessage message = new SoapMessage(sqlDate, sqlTime, customerId, providerId, msgType, body);
+        java.sql.Timestamp moment = java.sql.Timestamp.valueOf(currDateTime);
+        SoapMessage message = new SoapMessage(moment, customerId, providerId, msgType, body);
+        databaseListener.createSoapMessageEntity(message);
 
         return render(model, TEMPLATE_PATH + "/keeper-status.vm");
     }

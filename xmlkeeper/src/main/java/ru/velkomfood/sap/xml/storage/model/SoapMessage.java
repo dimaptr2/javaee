@@ -3,12 +3,12 @@ package ru.velkomfood.sap.xml.storage.model;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 public class SoapMessage implements Serializable {
 
-    private java.sql.Date date;
-    private java.sql.Time time;
+    private java.sql.Timestamp moment;
     private long customerId;
     private long providerId;
     private String messageType;
@@ -17,30 +17,21 @@ public class SoapMessage implements Serializable {
     public SoapMessage() {
     }
 
-    public SoapMessage(Date date, Time time, long customerId, long providerId,
-                       String messageType, String xmlMessage) {
-        this.date = date;
-        this.time = time;
+    public SoapMessage(Timestamp moment, long customerId,
+                       long providerId, String messageType, String xmlMessage) {
+        this.moment = moment;
         this.customerId = customerId;
         this.providerId = providerId;
         this.messageType = messageType;
         this.xmlMessage = xmlMessage;
     }
 
-    public Date getDate() {
-        return date;
+    public Timestamp getMoment() {
+        return moment;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Time getTime() {
-        return time;
-    }
-
-    public void setTime(Time time) {
-        this.time = time;
+    public void setMoment(Timestamp moment) {
+        this.moment = moment;
     }
 
     public long getCustomerId() {
@@ -79,24 +70,22 @@ public class SoapMessage implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SoapMessage that = (SoapMessage) o;
-        return customerId == that.customerId &&
-                providerId == that.providerId &&
-                date.equals(that.date) &&
-                time.equals(that.time) &&
-                messageType.equals(that.messageType);
+        SoapMessage message = (SoapMessage) o;
+        return customerId == message.customerId &&
+                providerId == message.providerId &&
+                moment.equals(message.moment) &&
+                messageType.equals(message.messageType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(date, time, customerId, providerId, messageType);
+        return Objects.hash(moment, customerId, providerId, messageType);
     }
 
     @Override
     public String toString() {
         return "SoapMessage{" +
-                "date=" + date +
-                ", time=" + time +
+                "moment=" + moment +
                 ", customerId=" + customerId +
                 ", providerId=" + providerId +
                 ", messageType='" + messageType + '\'' +

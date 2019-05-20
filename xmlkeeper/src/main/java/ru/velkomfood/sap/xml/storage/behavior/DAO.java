@@ -5,6 +5,7 @@ import java.util.Optional;
 
 public interface DAO<Entity, Key> {
 
+    boolean exists(Entity entity);
     void create(Entity entity);
     Optional<Entity> findOne(Key key);
     List<Entity> findByKeyBetween(Key fromKey, Key toKey);

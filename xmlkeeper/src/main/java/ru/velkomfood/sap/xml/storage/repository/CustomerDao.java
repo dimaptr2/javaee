@@ -17,6 +17,25 @@ public class CustomerDao implements DAO<Customer, Long> {
     }
 
     @Override
+    public boolean exists(Customer customer) {
+
+        int counter;
+        long id = customer.getId();
+
+        try (Connection connection = sqlEngine.open()) {
+            counter = connection.createQuery(QUERY.COUNT_CUSTOMERS.label)
+                    .addParameter("id", id)
+                    .executeScalar(Integer.class);
+        }
+
+        if (counter > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public void create(Customer customer) {
 
         long id = customer.getId();
@@ -97,6 +116,7 @@ public class CustomerDao implements DAO<Customer, Long> {
 
     private enum QUERY {
 
+        COUNT_CUSTOMERS("SELECT COUNT( id ) FROM customers WHERE id = :id"),
         CREATE_CUSTOMER("INSERT INTO customers VALUES (:id, :name)"),
         READ_CUSTOMER("SELECT id, name FROM customers WHERE id = :id"),
         READ_CUSTOMERS_BETWEEN("SELECT id, name FROM customers WHERE id BETWEEN :fromKey AND :toKey ORDER BY id"),

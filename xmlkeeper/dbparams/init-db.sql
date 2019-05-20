@@ -1,3 +1,3 @@
 CREATE TABLE IF NOT EXISTS customers (id BIGINT PRIMARY KEY, name VARCHAR(50));
 CREATE TABLE IF NOT EXISTS providers (id BIGINT PRIMARY KEY, name VARCHAR(50));
-CREATE TABLE IF NOT EXISTS soap_message (dt DATE NOT NULL, tm TIME NOT NULL, customer_id BIGINT NOT NULL, provider_id BIGINT NOT NULL, msg_type VARCHAR(50) NOT NULL, xml_message LONGTEXT, CONSTRAINT `fk_customer_id` FOREIGN KEY (customer_id) REFERENCES customers(id), CONSTRAINT `fk_provider_id` FOREIGN KEY (provider_id) REFERENCES providers(id), PRIMARY KEY (dt, tm, customer_id, provider_id, msg_type))
+CREATE TABLE IF NOT EXISTS soap_message (moment TIMESTAMP NOT NULL, customer_id BIGINT NOT NULL, provider_id BIGINT NOT NULL, msg_type VARCHAR(50) NOT NULL, xml_message LONGTEXT, CONSTRAINT `fk_customer_id` FOREIGN KEY (customer_id) REFERENCES customers(id), CONSTRAINT `fk_provider_id` FOREIGN KEY (provider_id) REFERENCES providers(id), PRIMARY KEY (moment, customer_id, provider_id, msg_type))

@@ -2,9 +2,11 @@ plugins {
     id 'java'
     id 'idea'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '5.0.0'
 }
 
 ext {
+    sapJavaConnectorPath = '/usr/sap/JCo'
     sparkJavaVersion = '2.9.0'
     sparkTemplaterVersion = '2.7.1'
     slf4jVersion = '1.7.26'
@@ -24,28 +26,30 @@ repositories {
 }
 
 dependencies {
-    
-    compile "com.sparkjava:spark-core:$sparkJavaVersion"
-    compile "com.sparkjava:spark-template-velocity:$sparkTemplaterVersion"
-    compile "org.slf4j:slf4j-simple:$slf4jVersion"
-    compile "org.sql2o:sql2o:$sql2oVersion"
-    compile "org.mariadb.jdbc:mariadb-java-client:$mariadbVersion"
+
+    // Only for the compiling
+    compileOnly fileTree(dir: sapJavaConnectorPath, includes: ['sapjco3.jar'])
+    // Include all dependencies on the Spark Java Framework
+    implementation "com.sparkjava:spark-core:$sparkJavaVersion"
+    implementation "com.sparkjava:spark-template-velocity:$sparkTemplaterVersion"
+    // Logger definition
+    implementation "org.slf4j:slf4j-simple:$slf4jVersion"
+    // JDBC client for Mariadb and Wrapper SQL2O
+    implementation "org.sql2o:sql2o:$sql2oVersion"
+    implementation "org.mariadb.jdbc:mariadb-java-client:$mariadbVersion"
     // for testing
     testCompile "junit:junit:4.12"
     
 }
 
 // Create a fat jar file
-task createFatJar(type: Jar) {
-
+shadowJar {
     manifest {
         attributes(
                 'Implementation-Version': project.version,
-                'Main-Class': mainClassName
+                'Main-Class': mainClassName,
+                'Class-Path': (sapJavaConnectorPath + '/' + 'sapjco3.jar')
         )
     }
-    with jar
-    // Extract and add all dependencies to the jar file
-    from configurations.compile.collect() { it.isDirectory() ? it : zipTree(it) }
-
 }
+
