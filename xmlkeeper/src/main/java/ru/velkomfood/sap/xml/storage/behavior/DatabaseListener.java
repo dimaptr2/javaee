@@ -10,6 +10,6 @@ public interface DatabaseListener {
     Logger LOGGER = LoggerFactory.getLogger(DatabaseListener.class);
     void initialize();
     void createCustomerEntity(Customer customer);
-    void createSoapMessageEntity(SoapMessage message);
+    void saveSoapMessageEntity(SoapMessage message);
 
 }

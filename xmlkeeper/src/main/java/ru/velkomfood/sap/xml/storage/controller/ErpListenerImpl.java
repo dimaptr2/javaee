@@ -28,13 +28,14 @@ public class ErpListenerImpl implements ErpListener {
             range.setValue("SIGN", "I");
             range.setValue("OPTION", "EQ");
             range.setValue("LOW", textIdValue);
+            range.setValue("HIGH", textIdValue);
             bapiCustomerList.execute(destination);
             JCoTable addrData = bapiCustomerList.getTableParameterList().getTable("ADDRESSDATA");
             if (addrData.getNumRows() > 0) {
-                if (addrData.nextRow()) {
+                do {
                     optional = Optional
                             .of(new Customer(addrData.getLong("CUSTOMER"), addrData.getString("NAME")));
-                }
+                } while (addrData.nextRow());
             }
         }
 

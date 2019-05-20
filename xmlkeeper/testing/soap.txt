@@ -1,0 +1,5 @@
+10000004;1;DESADV;<?xml version="1.0" encoding="UTF-8"?><item>1</item></xml>
+10000004;1;INVOIC;<?xml version="1.0" encoding="UTF-8"?><item>2</item></xml>
+10000004;2;DESADV;<?xml version="1.0" encoding="UTF-8"?><item>Хрен Моржовый!</item></xml>
+10000005;1;DESADV;<?xml version="1.0" encoding="UTF-8"?><item>Хрен Моржовый!</item></xml>
+10000005;2;DESADV;<?xml version="1.0" encoding="UTF-8"?><item>Прилетел</item></xml>

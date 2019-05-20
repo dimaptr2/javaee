@@ -64,7 +64,7 @@ public class DatabaseListenerImpl implements DatabaseListener {
     }
 
     @Override
-    public void createSoapMessageEntity(SoapMessage message) {
+    public void saveSoapMessageEntity(SoapMessage message) {
 
         DAO<SoapMessage, MessageKey> dao = new SoapMessageDao(sqlManager);
         if (dao.exists(message)) {

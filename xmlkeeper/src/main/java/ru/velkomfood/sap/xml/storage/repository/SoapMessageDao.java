@@ -168,7 +168,7 @@ public class SoapMessageDao implements DAO<SoapMessage, MessageKey> {
 
     private enum QUERY {
 
-        COUNT_MESSAGES("SELECT COUNT( * ) soap_message WHERE moment = :moment" +
+        COUNT_MESSAGES("SELECT COUNT( * ) FROM soap_message WHERE moment = :moment" +
                 " AND customer_id = :customerId" +
                 " AND provider_id = :providerId" +
                 " AND msg_type = :messageType"),

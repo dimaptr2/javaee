@@ -13,7 +13,6 @@ import spark.template.velocity.VelocityTemplateEngine;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -91,12 +90,16 @@ public class WebEngineImpl implements WebEngine {
         String msgType = request.params(":messageType");
         long providerId = Long.valueOf(request.params(":provider"));
         String body = request.body();
+        model.put("body", body);
         // Create a SOAP message object
         java.sql.Timestamp moment = java.sql.Timestamp.valueOf(currDateTime);
-        SoapMessage message = new SoapMessage(moment, customerId, providerId, msgType, body);
-        databaseListener.createSoapMessageEntity(message);
+        if (!body.isEmpty()) {
+            SoapMessage message = new SoapMessage(moment, customerId, providerId, msgType, body);
+            databaseListener.saveSoapMessageEntity(message);
+        }
 
-        return render(model, TEMPLATE_PATH + "/keeper-status.vm");
+        response.header("Content-Type", "application/xml; charset=utf-8");
+        return body;
     }
 
     private String translateLocalDateToRussianFormat(LocalDate value) {

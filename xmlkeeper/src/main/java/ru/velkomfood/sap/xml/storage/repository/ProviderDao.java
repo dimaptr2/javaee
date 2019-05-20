@@ -50,18 +50,40 @@ public class ProviderDao implements DAO<Provider, Long> {
     }
 
     @Override
-    public Optional<Provider> findOne(Long aLong) {
-        return Optional.empty();
+    public Optional<Provider> findOne(Long id) {
+
+        Optional<Provider> optionalProvider;
+
+        try (Connection connection = sqlEngine.open()) {
+            Provider provider = connection.createQuery(QUERY.READ_PROVIDER.label)
+                    .addParameter("id", id)
+                    .executeScalar(Provider.class);
+            optionalProvider = Optional.of(provider);
+        }
+
+        return optionalProvider;
     }
 
     @Override
     public List<Provider> findByKeyBetween(Long fromKey, Long toKey) {
-        return null;
+
+        try (Connection connection = sqlEngine.open()) {
+            return connection.createQuery(QUERY.READ_PROVIDERS_BETWEEN.label)
+                    .addParameter("fromKey", fromKey)
+                    .addParameter("toKey", toKey)
+                    .executeAndFetch(Provider.class);
+        }
+
     }
 
     @Override
     public List<Provider> findAll() {
-        return null;
+
+        try (Connection connection = sqlEngine.open()) {
+            return connection.createQuery(QUERY.READ_ALL.label)
+                    .executeAndFetch(Provider.class);
+        }
+
     }
 
     @Override
