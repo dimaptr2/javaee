@@ -47,8 +47,8 @@ public class PurchaseGroupDao implements DAO<PurchaseGroup, String> {
 
         try (Connection connection = sqlEngine.open()) {
             connection.createQuery(QUERY.UPDATE_PURGRP.label)
-                    .addParameter("id", purchaseGroup.getId())
                     .addParameter("name", purchaseGroup.getName())
+                    .addParameter("id", purchaseGroup.getId())
                     .executeUpdate();
         }
 
@@ -58,9 +58,9 @@ public class PurchaseGroupDao implements DAO<PurchaseGroup, String> {
 
     private enum QUERY {
 
-        PURGRP_EXIST("SELECT COUNT( id ) FROM pur_groups WHERE id := key"),
-        CREATE_PURGRP("INSERT INTO pur_groups VALUES (:id, :name"),
-        UPDATE_PURGRP("UPDATE pur_groups SET name = :name WHERE id = :id");
+        PURGRP_EXIST("SELECT COUNT( id ) FROM pur_group WHERE id := key"),
+        CREATE_PURGRP("INSERT INTO pur_group VALUES (:id, :name"),
+        UPDATE_PURGRP("UPDATE pur_group SET name = :name WHERE id = :id");
 
         private final String label;
 

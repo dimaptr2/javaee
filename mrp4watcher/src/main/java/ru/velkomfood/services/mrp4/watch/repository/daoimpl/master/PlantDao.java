@@ -47,8 +47,8 @@ public class PlantDao implements DAO<Plant, String> {
 
         try (Connection connection = sqlEngine.open()) {
             connection.createQuery(QUERY.UPDATE_PLANT.label)
-                    .addParameter("id", plant.getId())
                     .addParameter("name", plant.getName())
+                    .addParameter("id", plant.getId())
                     .executeUpdate();
         }
 
@@ -56,9 +56,9 @@ public class PlantDao implements DAO<Plant, String> {
 
     private enum QUERY {
 
-        PLANT_EXIST("SELECT COUNT( id ) FROM plants WHERE id := key"),
-        CREATE_PLANT("INSERT INTO plants VALUES (:id, :name"),
-        UPDATE_PLANT("UPDATE plants SET name = :name WHERE id = :id");
+        PLANT_EXIST("SELECT COUNT( id ) FROM plant WHERE id := key"),
+        CREATE_PLANT("INSERT INTO plant VALUES (:id, :name"),
+        UPDATE_PLANT("UPDATE plant SET name = :name WHERE id = :id");
 
         private final String label;
 

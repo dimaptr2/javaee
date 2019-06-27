@@ -2,6 +2,7 @@ package ru.velkomfood.services.mrp4.watch.model.master;
 
 import ru.velkomfood.services.mrp4.watch.model.DataEntity;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Material implements DataEntity {

@@ -1,12 +1,3 @@
-DROP TABLE IF EXISTS mat_taxes;
-DROP TABLE IF EXISTS matunits;
-DROP TABLE IF EXISTS matprices;
-DROP TABLE IF EXISTS materials;
-DROP TABLE IF EXISTS measure;
-DROP TABLE IF EXISTS pur_groups;
-DROP TABLE IF EXISTS period;
-DROP TABLE IF EXISTS currency;
-DROP TABLE IF EXISTS plants;
 CREATE TABLE IF NOT EXISTS plant
 (
     id   VARCHAR(4) NOT NULL PRIMARY KEY,
@@ -64,7 +55,7 @@ CREATE TABLE IF NOT EXISTS mat_tax
     id          BIGINT     NOT NULL,
     plant_id    VARCHAR(4) NOT NULL,
     currency_id VARCHAR(3) NOT NULL,
-    tax_code    INT(2)     NOT NULL,
+    tax_code    INT(2),
     tax_rate    DECIMAL(20, 2),
     CONSTRAINT `mat_key_03` FOREIGN KEY (id) REFERENCES material (id),
     CONSTRAINT `plant_key_03` FOREIGN KEY (plant_id) REFERENCES plant (id),
