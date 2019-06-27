@@ -69,7 +69,7 @@ public class DataManagerBase implements DataManager {
         }
 
         sqlEngine = new Sql2o(mds);
-        createDatabaseStructureIfNotExists();
+        createDatabaseStructureIfNotExist();
 
     }
 
@@ -86,7 +86,7 @@ public class DataManagerBase implements DataManager {
 
     // private section
 
-    private void createDatabaseStructureIfNotExists() {
+    private void createDatabaseStructureIfNotExist() {
 
         StringBuilder sb = new StringBuilder(0);
 
