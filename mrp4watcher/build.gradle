@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '5.0.0'
+}
+
+ext {
+    sapJavaConnector = '/usr/sap/JCo'
+    slf4jVersion = '1.7.26'
+    mariadbClientVersion = '2.4.2'
+    sql2oVersion = '1.6.0'
+}
+
+group 'ru.velkomfood.services.mrp4.watch'
+version '12.4.2'
+mainClassName = group + '.Launcher'
+
+sourceCompatibility = 12
+targetCompatibility = 12
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    // External library
+    compileOnly fileTree(dir: sapJavaConnector, includes: ['sapjco3.jar'])
+    // The basic dependencies
+    implementation("org.slf4j:slf4j-simple:$slf4jVersion")
+    implementation("org.mariadb.jdbc:mariadb-java-client:$mariadbClientVersion")
+    implementation("org.sql2o:sql2o:$sql2oVersion")
+
+}
+
+// Create an executable file with all dependencies
+shadowJar {
+    manifest {
+        attributes('Implementation-Version' : project.version)
+        attributes('Main-Class' : mainClassName)
+        attributes('Class-Path' : (sapJavaConnector + '/' + 'sapjco3.jar'))
+    }
+}
