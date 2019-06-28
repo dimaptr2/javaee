@@ -58,6 +58,11 @@ public class ErpReaderBase implements ErpReader {
     }
 
     @Override
+    public void readUnitsOfMeasure(JCoDestination destination) throws JCoException {
+
+    }
+
+    @Override
     public void readMaterials(JCoDestination destination) throws JCoException {
 
     }

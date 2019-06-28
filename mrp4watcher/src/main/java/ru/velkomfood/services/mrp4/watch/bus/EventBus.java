@@ -15,10 +15,11 @@ public class EventBus {
 
     private EventBus() {
         cache = new ConcurrentHashMap<>();
-        cache.put("plant", new ConcurrentLinkedQueue<>());
         cache.put("purchase.unit", new ConcurrentLinkedQueue<>());
         cache.put("material.master.data", new ConcurrentLinkedQueue<>());
         cache.put("material.master.details", new ConcurrentLinkedQueue<>());
+        cache.put("stocks", new ConcurrentLinkedQueue<>());
+        cache.put("requirements", new ConcurrentLinkedQueue<>());
     }
 
     public static EventBus eventBus() {

@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS plant;
 DROP VIEW IF EXISTS vmaterial;
 DROP VIEW IF EXISTS vmatchange;
 
+
 CREATE TABLE IF NOT EXISTS plant
 (
     id   VARCHAR(4) NOT NULL PRIMARY KEY,
@@ -35,6 +36,14 @@ CREATE TABLE IF NOT EXISTS measure
 (
     id   VARCHAR(3) NOT NULL PRIMARY KEY,
     name VARCHAR(50)
+);
+CREATE TABLE IF NOT EXISTS warehouse
+(
+    id VARCHAR(4) NOT NULL,
+    plant_id VARCHAR(4) NOT NULL,
+    name VARCHAR(50),
+    CONSTRAINT `plant_key_00` FOREIGN KEY (plant_id) REFERENCES plant (id),
+    PRIMARY KEY (id, plant_id)
 );
 CREATE TABLE IF NOT EXISTS material
 (

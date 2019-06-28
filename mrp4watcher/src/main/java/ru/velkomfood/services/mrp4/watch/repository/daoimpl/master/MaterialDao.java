@@ -1,6 +1,7 @@
 package ru.velkomfood.services.mrp4.watch.repository.daoimpl.master;
 
 import org.sql2o.Connection;
+import org.sql2o.Query;
 import org.sql2o.Sql2o;
 import ru.velkomfood.services.mrp4.watch.model.master.Material;
 import ru.velkomfood.services.mrp4.watch.repository.DAO;
@@ -19,11 +20,11 @@ public class MaterialDao implements DAO<Material, Long> {
         boolean existence = false;
 
         try (Connection connection = sqlEngine.open()) {
-            long numberOfMaterials = connection.createQueryWithParams(QUERY.MATERIAL_EXIST.label, key)
-                    .addParameter("key", key)
-                    .executeScalar(Long.class);
-            if (numberOfMaterials > 0) {
-                existence = true;
+            try (Query query = connection.createQuery(QUERY.MATERIAL_EXIST.label)) {
+                query.setAutoDeriveColumnNames(true);
+                if (query.addParameter("key", key).executeScalar(Long.class) > 0) {
+                    existence = true;
+                }
             }
         }
 
@@ -58,8 +59,8 @@ public class MaterialDao implements DAO<Material, Long> {
 
     private enum QUERY {
 
-        MATERIAL_EXIST("SELECT COUNT( id ) FROM material WHERE id := key"),
-        CREATE_MATERIAL("INSERT INTO material VALUES (:id, :description"),
+        MATERIAL_EXIST("SELECT COUNT( id ) FROM material WHERE id = :key"),
+        CREATE_MATERIAL("INSERT INTO material VALUES (:id, :description)"),
         UPDATE_MATERIAL("UPDATE material SET description = :description WHERE id = :id");
 
         private final String label;

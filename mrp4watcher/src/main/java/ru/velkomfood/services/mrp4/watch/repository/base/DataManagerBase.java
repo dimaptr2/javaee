@@ -8,14 +8,11 @@ import org.sql2o.Sql2o;
 import ru.velkomfood.services.mrp4.watch.Component;
 import ru.velkomfood.services.mrp4.watch.bus.EventBus;
 import ru.velkomfood.services.mrp4.watch.model.DataEntity;
-import ru.velkomfood.services.mrp4.watch.model.master.Material;
-import ru.velkomfood.services.mrp4.watch.model.master.Plant;
-import ru.velkomfood.services.mrp4.watch.model.master.PurchaseGroup;
+import ru.velkomfood.services.mrp4.watch.model.master.*;
+import ru.velkomfood.services.mrp4.watch.model.master.key.WarehouseKey;
 import ru.velkomfood.services.mrp4.watch.repository.DAO;
 import ru.velkomfood.services.mrp4.watch.repository.DataManager;
-import ru.velkomfood.services.mrp4.watch.repository.daoimpl.master.MaterialDao;
-import ru.velkomfood.services.mrp4.watch.repository.daoimpl.master.PlantDao;
-import ru.velkomfood.services.mrp4.watch.repository.daoimpl.master.PurchaseGroupDao;
+import ru.velkomfood.services.mrp4.watch.repository.daoimpl.master.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -70,6 +67,8 @@ public class DataManagerBase implements DataManager {
 
         sqlEngine = new Sql2o(mds);
         createDatabaseStructureIfNotExist();
+        createOrganizationalUnits();
+        createCurrencyMasterData();
 
     }
 
@@ -116,18 +115,68 @@ public class DataManagerBase implements DataManager {
 
     }
 
+    private void createOrganizationalUnits() {
+
+        DAO<Plant, String> plantDao = new PlantDao(sqlEngine);
+        Plant plant = new Plant("1000", "ООО МК Павловская Слобода");
+        if (!plantDao.exists(plant.getId())) {
+            plantDao.create(plant);
+        }
+
+        Period[] periods = buildPeriods();
+        DAO<Period, Integer> periodDao = new PeriodDao(sqlEngine);
+
+        for (Period periodValue : periods) {
+            if (!periodDao.exists(periodValue.getId())) {
+                periodDao.create(periodValue);
+            }
+        }
+
+    }
+
+    private Period[] buildPeriods() {
+        return new Period[] {
+                new Period(1, "Январь"),
+                new Period(2, "Февраль"),
+                new Period(3, "Март"),
+                new Period(4, "Апрель"),
+                new Period(5, "Май"),
+                new Period(6, "Июнь"),
+                new Period(7, "Июль"),
+                new Period(8, "Август"),
+                new Period(9, "Сентябрь"),
+                new Period(10, "Октябрь"),
+                new Period(11, "Ноябрь"),
+                new Period(12, "Декабрь")
+        };
+    }
+
+    private void createCurrencyMasterData() {
+
+        // Add currencies
+        DAO<Currency, String> currencyDao = new CurrencyDao(sqlEngine);
+
+        Currency euro = new Currency("EUR", "Евро");
+        if (!currencyDao.exists(euro.getId())) {
+            currencyDao.create(euro);
+        }
+
+        Currency rub = new Currency("RUB", "Рубль РФ");
+        if (!currencyDao.exists(rub.getId())) {
+            currencyDao.create(rub);
+        }
+
+        Currency usd = new Currency("USD", "Доллар США");
+        if (!currencyDao.exists(usd.getId())) {
+            currencyDao.create(usd);
+        }
+
+    }
+
     // Concrete method for the saving in the database
     private void save(DataEntity entity) {
 
-        if (entity instanceof Plant) {
-            var plant = (Plant) entity;
-            DAO<Plant, String> plantDao = new PlantDao(sqlEngine);
-            if (plantDao.exists(plant.getId())) {
-                plantDao.update(plant);
-            } else {
-                plantDao.create(plant);
-            }
-        } else if (entity instanceof PurchaseGroup) {
+        if (entity instanceof PurchaseGroup) {
             var purGroup = (PurchaseGroup) entity;
             DAO<PurchaseGroup, String> purGrpDao = new PurchaseGroupDao(sqlEngine);
             if (purGrpDao.exists(purGroup.getId())) {
@@ -143,8 +192,26 @@ public class DataManagerBase implements DataManager {
             } else {
                 materialDao.create(material);
             }
+        } else if (entity instanceof Measure) {
+            var measure = (Measure) entity;
+            DAO<Measure, String> measureDao = new MeasureDao(sqlEngine);
+            if (measureDao.exists(measure.getId())) {
+                measureDao.update(measure);
+            } else {
+                measureDao.create(measure);
+            }
+        } else if (entity instanceof Warehouse) {
+            var whs = (Warehouse) entity;
+            DAO<Warehouse, WarehouseKey> warehouseDao = new WarehouseDao(sqlEngine);
+            WarehouseKey key = new WarehouseKey(whs.getId(), whs.getPlantId());
+            if (warehouseDao.exists(key)) {
+                warehouseDao.update(whs);
+            } else {
+                warehouseDao.create(whs);
+            }
         }
 
     }
+
 
 }
