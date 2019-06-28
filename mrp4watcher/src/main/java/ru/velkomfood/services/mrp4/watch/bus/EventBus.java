@@ -16,6 +16,8 @@ public class EventBus {
     private EventBus() {
         cache = new ConcurrentHashMap<>();
         cache.put("purchase.unit", new ConcurrentLinkedQueue<>());
+        cache.put("uom", new ConcurrentLinkedQueue<>());
+        cache.put("warehouse", new ConcurrentLinkedQueue<>());
         cache.put("material.master.data", new ConcurrentLinkedQueue<>());
         cache.put("material.master.details", new ConcurrentLinkedQueue<>());
         cache.put("stocks", new ConcurrentLinkedQueue<>());

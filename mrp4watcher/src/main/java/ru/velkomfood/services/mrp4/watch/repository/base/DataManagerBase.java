@@ -76,7 +76,8 @@ public class DataManagerBase implements DataManager {
     public void saveData(String address) {
 
         if (!eventBus.queueIsEmpty(address)) {
-            for (int idx = 0; idx < eventBus.queueSize(address); idx++) {
+            final int limit = eventBus.queueSize(address);
+            for (int idx = 0; idx < limit; idx++) {
                 eventBus.pull(address).ifPresent(this::save);
             }
         }
@@ -94,7 +95,6 @@ public class DataManagerBase implements DataManager {
             String line;
             while ((line = reader.readLine()) != null) {
                 sb.append(line);
-                logger.info(line);
             }
             reader.close();
         } catch (IOException ioe) {

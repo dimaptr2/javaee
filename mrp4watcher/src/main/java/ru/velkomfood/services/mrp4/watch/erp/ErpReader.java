@@ -7,9 +7,9 @@ import ru.velkomfood.services.mrp4.watch.Component;
 public interface ErpReader extends Component {
 
     JCoDestination createDestination() throws JCoException;
-    void readPlantInfo(JCoDestination destination) throws JCoException;
     void readPurchaseUnits(JCoDestination destination) throws JCoException;
     void readUnitsOfMeasure(JCoDestination destination) throws JCoException;
+    void readWarehouse(JCoDestination destination) throws JCoException;
     void readMaterials(JCoDestination destination) throws JCoException;
 
 }

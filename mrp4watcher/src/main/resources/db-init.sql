@@ -70,3 +70,19 @@ CREATE TABLE IF NOT EXISTS mat_tax
     CONSTRAINT `currency_key_02` FOREIGN KEY (currency_id) REFERENCES currency (id),
     PRIMARY KEY (id, plant_id, currency_id, tax_code)
 );
+CREATE TABLE IF NOT EXISTS delivery_type
+(
+    id VARCHAR(4) NOT NULL,
+    plant_id VARCHAR(4) NOT NULL,
+    description VARCHAR(50),
+    CONSTRAINT `plant_key_04` FOREIGN KEY (plant_id) REFERENCES plant (id),
+    PRIMARY KEY (id, plant_id)
+);
+CREATE TABLE IF NOT EXISTS moving_type
+(
+    id VARCHAR(3) NOT NULL,
+    plant_id VARCHAR(4) NOT NULL,
+    description VARCHAR(50),
+    CONSTRAINT `plant_key_05` FOREIGN KEY (plant_id) REFERENCES plant (id),
+    PRIMARY KEY (id, plant_id)
+);

@@ -3,6 +3,9 @@ DROP TABLE IF EXISTS mat_tax;
 DROP TABLE IF EXISTS matunit;
 DROP TABLE IF EXISTS matprice;
 DROP TABLE IF EXISTS material;
+DROP TABLE IF EXISTS warehouse;
+DROP TABLE IF EXISTS moving_type;
+DROP TABLE IF EXISTS delivery_type;
 DROP TABLE IF EXISTS measure;
 DROP TABLE IF EXISTS pur_group;
 DROP TABLE IF EXISTS period;
@@ -10,7 +13,6 @@ DROP TABLE IF EXISTS currency;
 DROP TABLE IF EXISTS plant;
 DROP VIEW IF EXISTS vmaterial;
 DROP VIEW IF EXISTS vmatchange;
-
 
 CREATE TABLE IF NOT EXISTS plant
 (
@@ -83,6 +85,22 @@ CREATE TABLE IF NOT EXISTS mat_tax
     CONSTRAINT `plant_key_03` FOREIGN KEY (plant_id) REFERENCES plant (id),
     CONSTRAINT `currency_key_02` FOREIGN KEY (currency_id) REFERENCES currency (id),
     PRIMARY KEY (id, plant_id, currency_id, tax_code)
+);
+CREATE TABLE IF NOT EXISTS delivery_type
+(
+    id VARCHAR(4) NOT NULL,
+    plant_id VARCHAR(4) NOT NULL,
+    description VARCHAR(50),
+    CONSTRAINT `plant_key_04` FOREIGN KEY (plant_id) REFERENCES plant (id),
+    PRIMARY KEY (id, plant_id)
+);
+CREATE TABLE IF NOT EXISTS moving_type
+(
+    id VARCHAR(3) NOT NULL,
+    plant_id VARCHAR(4) NOT NULL,
+    description VARCHAR(50),
+    CONSTRAINT `plant_key_05` FOREIGN KEY (plant_id) REFERENCES plant (id),
+    PRIMARY KEY (id, plant_id)
 );
 
 ### View's section
